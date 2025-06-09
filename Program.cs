@@ -11,7 +11,9 @@ namespace _0806
         static void Main(string[] args)
         {
             Agent agent = new Agent( 8, "jhgy", "tmhmnv", "gcews", "hrbed", 8);
-            DAL.AddAgent(agent);
+            //DAL.AddAgent(agent);
+            List<Agent> a = DAL.GetAgents();
+            Console.WriteLine(a[0].RealName);
 
         }
     }

@@ -9,17 +9,15 @@ namespace _0806
 {
     internal class DAL
     {
-
         public static void AddAgent(Agent agent)
         {
             string connstring = "Server=127.0.0.1; database=eagleeyedb; UID=root; password=";
+            string query = "INSERT INTO agents (CodeName , RealName, Location, Status, MissionsCompleted ) VALUES (@CodeName, @RealName, @Location, @Status, @MissionsCompleted )";
             try
             {
                 using (var connection = new MySqlConnection(connstring))
                 {
-
                     connection.Open();
-                    string query = "INSERT INTO agents (CodeName , RealName, Location, Status, MissionsCompleted ) VALUES (@CodeName, @RealName, @Location, @Status, @MissionsCompleted )";
                     var cmd = new MySqlCommand(query, connection);
 
                     cmd.Parameters.AddWithValue("@CodeName", agent.CodeName);
@@ -41,16 +39,16 @@ namespace _0806
             }
         }
 
-        public List<Agent> getEmployees(string query = "SELECT * FROM agents")
+
+        public static List<Agent> GetAgents()
         {
             string connstring = "Server=127.0.0.1; database=eagleeyedb; UID=root; password=";
             List<Agent> ageList = new List<Agent>();
-
+            string query = "SELECT * FROM agents";
             try
             {
                 using (var connection = new MySqlConnection(connstring))
                 {
-
                     connection.Open();
                     var cmd = new MySqlCommand(query, connection);
                     using (var reader = cmd.ExecuteReader())
@@ -78,12 +76,60 @@ namespace _0806
             {
                 Console.WriteLine($"Error while fetching employees: {ex.Message}");
             }
-
             return ageList;
         }
 
 
+        public static void UpdateAgent(int agentId, string newLocation)
+        {
+            string connstring = "Server=127.0.0.1; database=eagleeyedb; UID=root; password=";
+            string query = $"UPDATE agents SET location = {newLocation} WHERE id = {agentId}";//
+            try
+            {
+                using (var connection = new MySqlConnection(connstring))
+                {
 
+                    connection.Open();
+                    var cmd = new MySqlCommand(query, connection);
+
+                    using (var reader = cmd.ExecuteReader()) ;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("MySQL Error: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("General Error: " + ex.Message);
+            }
+        }
+
+
+        public static void DeleteAgent(int agentId)
+        {
+            string connstring = "Server=127.0.0.1; database=eagleeyedb; UID=root; password=";
+            string query = $"DELETE FROM agents WHERE id = {agentId};";//
+            try
+            {
+                using (var connection = new MySqlConnection(connstring))
+                {
+
+                    connection.Open();
+                    var cmd = new MySqlCommand(query, connection);
+
+                    using (var reader = cmd.ExecuteReader()) ;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("MySQL Error: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("General Error: " + ex.Message);
+            }
+        }
     }
     
 }
