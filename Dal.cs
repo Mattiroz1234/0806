@@ -83,7 +83,7 @@ namespace _0806
         public static void UpdateAgent(int agentId, string newLocation)
         {
             string connstring = "Server=127.0.0.1; database=eagleeyedb; UID=root; password=";
-            string query = $"UPDATE agents SET location = {newLocation} WHERE id = {agentId}";//
+            string query = "UPDATE agents SET location = @newLocation WHERE id = @agentId";
             try
             {
                 using (var connection = new MySqlConnection(connstring))
@@ -91,6 +91,9 @@ namespace _0806
 
                     connection.Open();
                     var cmd = new MySqlCommand(query, connection);
+
+                    cmd.Parameters.AddWithValue("@agentId", agentId);
+                    cmd.Parameters.AddWithValue("@newLocation", newLocation);
 
                     using (var reader = cmd.ExecuteReader()) ;
                 }
@@ -109,7 +112,7 @@ namespace _0806
         public static void DeleteAgent(int agentId)
         {
             string connstring = "Server=127.0.0.1; database=eagleeyedb; UID=root; password=";
-            string query = $"DELETE FROM agents WHERE id = {agentId};";//
+            string query = "DELETE FROM agents WHERE id = @agentId";//
             try
             {
                 using (var connection = new MySqlConnection(connstring))
@@ -117,6 +120,8 @@ namespace _0806
 
                     connection.Open();
                     var cmd = new MySqlCommand(query, connection);
+
+                    cmd.Parameters.AddWithValue("@agentId", agentId);
 
                     using (var reader = cmd.ExecuteReader()) ;
                 }
